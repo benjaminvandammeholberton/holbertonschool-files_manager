@@ -1,9 +1,9 @@
-const redis = require('redis');
-const { promisify } = require('util');
+import { createClient } from 'redis';
+import { promisify } from 'util';
 
 class RedisClient {
     constructor() {
-        this.client = redis.createClient();
+        this.client = createClient();
 
         this.client.on('error', (err) => {
             console.log("Can't connect to Redis:", err);
@@ -30,4 +30,4 @@ class RedisClient {
 }
 
 const redisClient = new RedisClient();
-module.exports = redisClient;
+export default redisClient;
