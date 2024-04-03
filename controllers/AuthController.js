@@ -7,8 +7,7 @@ const AuthController = {
   getConnect: async (req, res) => {
     const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
     if (!b64auth) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     const auth = Buffer.from(b64auth, 'base64').toString('utf-8');
@@ -18,12 +17,10 @@ const AuthController = {
     const usersCollection = dbClient.db.collection('users');
     const user = await usersCollection.findOne({ email });
     if (!user) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     if (user.password !== hashedPassword) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     const token = uuidv4();
@@ -37,11 +34,10 @@ const AuthController = {
   getDisconnect: async (req, res) => {
     const token = req.headers['x-token'];
     if (!token) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     await redisClient.del(token);
-    res.status(200);
+    return res.status(200);
   },
 };
 
