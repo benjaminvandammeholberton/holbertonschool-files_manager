@@ -65,8 +65,8 @@ const FilesController = {
         userId: user._id,
         name,
         type,
-        parentId: parentId || 0,
         isPublic: isPublic || false,
+        parentId: parentId || 0,
       });
     }
 
@@ -110,7 +110,6 @@ const FilesController = {
       type,
       isPublic: isPublic || false,
       parentId: parentId || 0,
-      localPath: filePath,
     });
   },
 
