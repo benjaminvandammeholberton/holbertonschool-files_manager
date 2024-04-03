@@ -52,16 +52,22 @@ const FilesController = {
     if (type === 'folder') {
       const filesCollection = dbClient.db.collection('files');
       const newFolder = {
+        userId: user._id,
         name,
         type,
         parentId: parentId || 0,
         isPublic: isPublic || false,
-        userId: user._id,
       };
       await filesCollection.insertOne(newFolder);
       newFolder.id = newFolder._id;
-      delete newFolder._id;
-      return res.status(201).json(newFolder);
+      return res.status(201).json({
+        id: newFolder.id,
+        userId: user._id,
+        name,
+        type,
+        parentId: parentId || 0,
+        isPublic: isPublic || false,
+      });
     }
 
     // File creation
@@ -87,8 +93,8 @@ const FilesController = {
 
     // File to database
     const newFile = {
-      name,
       userId,
+      name,
       type,
       isPublic: isPublic || false,
       parentId: parentId || 0,
@@ -97,8 +103,15 @@ const FilesController = {
     const filesCollection = dbClient.db.collection('files');
     await filesCollection.insertOne(newFile);
     newFile.id = newFile._id;
-    delete newFile._id;
-    return res.status(201).json(newFile);
+    return res.status(201).json({
+      id: newFile.id,
+      userId,
+      name,
+      type,
+      isPublic: isPublic || false,
+      parentId: parentId || 0,
+      localPath: filePath,
+    });
   },
 
 };
