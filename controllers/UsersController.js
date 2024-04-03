@@ -1,11 +1,9 @@
 import dbClient from '../utils/db';
 
-const Bull = require('bull');
 const crypto = require('crypto');
 
 const UsersController = {
   postNew: async (req, res) => {
-    const userQueue = new Bull('userQueue');
     const { email, password } = req.body;
 
     if (!email) {
@@ -25,10 +23,6 @@ const UsersController = {
     const addNewUser = await usersCollection.insertOne({
       email,
       password: crypto.createHash('sha1').update(password).digest('hex'),
-    });
-
-    userQueue.add({
-      userId: addNewUser.insertedId,
     });
 
     return res.status(201).send({ email, id: addNewUser.insertedId });
