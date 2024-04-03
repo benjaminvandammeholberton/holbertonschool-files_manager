@@ -36,7 +36,10 @@ const AuthController = {
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
-    await redisClient.del(token);
+    const userId = await redisClient.del(token);
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
     return res.status(204);
   },
 };
