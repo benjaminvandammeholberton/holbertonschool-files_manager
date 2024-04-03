@@ -76,10 +76,20 @@ const FilesController = {
     const filePath = `${folderPath}/${uuid}`;
 
     if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath);
+      fs.mkdirSync(folderPath, { recursive: true }, (err) => {
+        if (err) {
+          console.error('A problem occured when creating the directory', err);
+          res.status(500).end();
+        }
+      });
     }
     const decryptedData = Buffer.from(data, 'base64').toString('utf-8');
-    fs.writeFile(filePath, decryptedData);
+    fs.writeFile(filePath, decryptedData, (err) => {
+      if (err) {
+        console.error('A problem occured when creating the file', err);
+        res.status(500).end();
+      }
+    });
 
     // File to database
     const newFile = {
