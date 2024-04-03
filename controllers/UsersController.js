@@ -1,6 +1,6 @@
 import dbClient from '../utils/db';
 
-const sha1 = require('js-sha1');
+const crypto = require('crypto');
 
 const UsersController = {
   postNew: async (req, res) => {
@@ -22,7 +22,7 @@ const UsersController = {
 
     const addNewUser = await usersCollection.insertOne({
       email,
-      password: sha1(password),
+      password: crypto.createHash('sha1').update(password).digest('hex'),
     });
 
     return res.status(201).send({ email, id: addNewUser.insertedId });
