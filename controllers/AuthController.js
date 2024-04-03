@@ -28,7 +28,7 @@ const AuthController = {
     const value = user._id.toString();
     const duration = 24 * 60 * 60;
     await redisClient.set(key, value, duration);
-    return res.json({ token });
+    return res.status(200).json({ token });
   },
 
   getDisconnect: async (req, res) => {
