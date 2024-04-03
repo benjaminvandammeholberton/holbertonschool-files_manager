@@ -11,8 +11,12 @@ const AuthController = {
     }
 
     const auth = Buffer.from(b64auth, 'base64').toString('utf-8');
-    const email = auth.split(':')[0];
-    const hashedPassword = sha1(auth.split(':')[1]);
+    const email = auth.split(':')[0] || '';
+    const password = auth.split(':')[1];
+    if (!password || !email) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const hashedPassword = sha1(password);
 
     const usersCollection = dbClient.db.collection('users');
     const user = await usersCollection.findOne({ email });
