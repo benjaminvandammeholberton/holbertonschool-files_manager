@@ -39,11 +39,11 @@ const FilesController = {
     }
     if (parentId) {
       const filesCollection = dbClient.db.collection('files');
-      const parent = await filesCollection.findOne({ parentId });
-      if (!parent) {
+      const _idParent = await filesCollection.findOne({ _id: parentId });
+      if (!_idParent) {
         return res.status(400).json({ error: 'Parent not found' });
       }
-      if (parent.type !== 'folder') {
+      if (_idParent.type !== 'folder') {
         return res.status(400).json({ error: 'Parent is not a folder' });
       }
     }
