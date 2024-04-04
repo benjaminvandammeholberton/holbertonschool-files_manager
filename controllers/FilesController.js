@@ -94,7 +94,7 @@ const FilesController = {
 
     // File to database
     const newFile = {
-      userId,
+      userId: user._id,
       name,
       type,
       isPublic: isPublic || false,
@@ -138,14 +138,40 @@ const FilesController = {
   getIndex: async (req, res) => {
     const token = req.headers['x-token'];
     const userId = await redisClient.get(`auth_${token}`);
-    console.log(userId);
     if (!userId) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
+
+    const { parentId, page } = req.query;
     const filesCollection = dbClient.db.collection('files');
-    const allFiles = filesCollection.findAll({ userId: [new ObjectId(userId)] });
-    console.log(allFiles.userId);
-    return 0;
+    const userIdtoFind = new ObjectId(userId);
+    let allFiles = [];
+
+    if (parentId) {
+      console.log(parentId);
+      const cursor = await filesCollection.find({
+        userId: userIdtoFind,
+        parentId: parseInt(parentId, 10),
+      });
+      allFiles = await cursor.toArray();
+    } else {
+      const cursor = await filesCollection.find({ userId: userIdtoFind });
+      allFiles = await cursor.toArray();
+    }
+
+    const jsonResponse = [];
+    for await (const file of allFiles) {
+      jsonResponse.push({
+        id: file._id,
+        userId: file.userId,
+        name: file.name,
+        type: file.type,
+        isPublic: file.isPublic,
+        parentId: file.parentId,
+      });
+    }
+
+    return res.status(201).json(jsonResponse);
   },
 };
 
