@@ -39,7 +39,8 @@ const FilesController = {
     }
     if (parentId) {
       const filesCollection = dbClient.db.collection('files');
-      const _idParent = await filesCollection.findOne({ _id: parentId });
+      const parentIdObjectId = new ObjectId(parentId);
+      const _idParent = await filesCollection.findOne({ _id: parentIdObjectId });
       if (!_idParent) {
         return res.status(400).json({ error: 'Parent not found' });
       }
