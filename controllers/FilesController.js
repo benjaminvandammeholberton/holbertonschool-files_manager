@@ -38,9 +38,8 @@ const FilesController = {
       return res.status(400).json({ error: 'Missing data' });
     }
     if (parentId) {
-      const parentIdObj = new ObjectId(parentId);
       const filesCollection = dbClient.db.collection('files');
-      const parent = await filesCollection.findOne({ parentId: parentIdObj });
+      const parent = await filesCollection.findOne({ parentId });
       if (!parent) {
         return res.status(400).json({ error: 'Parent not found' });
       }
@@ -56,7 +55,7 @@ const FilesController = {
         userId: user._id,
         name,
         type,
-        parentId: new ObjectId(parentId) || 0,
+        parentId: parentId || 0,
         isPublic: isPublic || false,
       };
       await filesCollection.insertOne(newFolder);
@@ -94,11 +93,11 @@ const FilesController = {
 
     // File to database
     const newFile = {
-      userId: new ObjectId(userId),
+      userId,
       name,
       type,
       isPublic: isPublic || false,
-      parentId: new ObjectId(parentId) || 0,
+      parentId: parentId || 0,
       localPath: filePath,
     };
     const filesCollection = dbClient.db.collection('files');
