@@ -66,7 +66,7 @@ const FilesController = {
         name,
         type,
         isPublic: isPublic || false,
-        parentId: parentId || 0,
+        parentId: new ObjectId(parentId) || 0,
       });
     }
 
@@ -93,11 +93,11 @@ const FilesController = {
 
     // File to database
     const newFile = {
-      userId,
+      userId: new ObjectId(userId),
       name,
       type,
       isPublic: isPublic || false,
-      parentId: parentId || 0,
+      parentId: new ObjectId(parentId) || 0,
       localPath: filePath,
     };
     const filesCollection = dbClient.db.collection('files');
