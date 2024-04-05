@@ -123,7 +123,7 @@ const FilesController = {
     const fileId = new ObjectId(req.params.id);
     const filesCollection = dbClient.db.collection('files');
     const file = await filesCollection.findOne({ _id: fileId });
-    if (!file || userId !== file.userId) {
+    if (!file || userId !== file.userId.toString()) {
       return res.status(401).json({ error: 'Not found' });
     }
     return res.status(201).json({
@@ -142,20 +142,25 @@ const FilesController = {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { parentId, page } = req.query;
+    const { parentId, page = 0 } = req.query;
     const filesCollection = dbClient.db.collection('files');
     const userIdtoFind = new ObjectId(userId);
     let allFiles = [];
 
     if (parentId) {
       console.log(parentId);
-      const cursor = await filesCollection.find({
-        userId: userIdtoFind,
-        parentId: parseInt(parentId, 10),
-      });
+      const cursor = await filesCollection.aggregate([
+        { $match: { userId: userIdtoFind, parentId: parseInt(parentId, 10) } },
+        { $limit: 20 },
+        { $skip: page },
+      ]);
       allFiles = await cursor.toArray();
     } else {
-      const cursor = await filesCollection.find({ userId: userIdtoFind });
+      const cursor = await filesCollection.aggregate([
+        { $match: { userId: userIdtoFind } },
+        { $limit: 20 },
+        { $skip: page },
+      ]);
       allFiles = await cursor.toArray();
     }
 
