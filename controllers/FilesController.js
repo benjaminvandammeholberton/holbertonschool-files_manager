@@ -156,15 +156,15 @@ const FilesController = {
     if (parentId) {
       const cursor = await filesCollection.aggregate([
         { $match: { userId: userIdtoFind, parentId: new ObjectId(parentId) } },
-        { $limit: 20 },
         { $skip: page * 20 },
+        { $limit: 20 },
       ]);
       allFiles = await cursor.toArray();
     } else {
       const cursor = await filesCollection.aggregate([
         { $match: { userId: userIdtoFind } },
-        { $limit: 20 },
         { $skip: page * 20 },
+        { $limit: 20 },
       ]);
       allFiles = await cursor.toArray();
     }
