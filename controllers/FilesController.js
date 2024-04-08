@@ -273,12 +273,7 @@ const FilesController = {
 
   getFile: async (req, res) => {
     // check if the file exists
-    let fileId = req.params.id;
-    try {
-      fileId = ObjectId(req.params.id);
-    } catch (err) {
-      return res.status(404).json({ error: 'Not found' });
-    }
+    const fileId = ObjectId(req.params.id);
     const filesCollection = dbClient.db.collection('files');
     const file = await filesCollection.findOne({ _id: fileId });
     if (!file) {
@@ -299,7 +294,7 @@ const FilesController = {
     try {
       const fileContent = fs.readFileSync(file.localPath, 'utf-8');
       const type = mime.lookup(file.name);
-      res.setHeader('Content-Type', `${type}`);
+      res.set('Content-Type', `${type}`);
       return res.send(fileContent);
     } catch (err) {
       return res.status(404).json({ error: 'Not found' });
