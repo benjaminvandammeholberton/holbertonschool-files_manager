@@ -23,7 +23,13 @@ const FilesController = {
     }
 
     // Verification of the request data
-    const { name, type, parentId, isPublic, data } = req.body;
+    const {
+      name,
+      type,
+      parentId,
+      isPublic,
+      data,
+    } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: 'Missing name' });
@@ -213,7 +219,7 @@ const FilesController = {
       },
     };
 
-    const result = await filesCollection.updateOne({ _id: fileId }, update);
+    await filesCollection.updateOne({ _id: fileId }, update);
 
     const fileUpdated = await filesCollection.findOne({ _id: fileId });
     fileUpdated.id = fileUpdated._id;
