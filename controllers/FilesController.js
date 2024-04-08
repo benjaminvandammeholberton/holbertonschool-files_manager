@@ -80,7 +80,7 @@ const FilesController = {
 
     // File creation
     const uuid = uuidv4();
-    const folderPath = process.env.FOLDER_PATH || './tmp/files_manager';
+    const folderPath = process.env.FOLDER_PATH || '/tmp/files_manager';
     const filePath = `${folderPath}/${uuid}`;
 
     if (!fs.existsSync(folderPath)) {
