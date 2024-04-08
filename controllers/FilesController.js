@@ -169,14 +169,17 @@ const FilesController = {
       allFiles = await cursor.toArray();
     }
 
-    const jsonResponse = allFiles.map((file) => ({
-      id: file._id,
-      userId: file.userId,
-      name: file.name,
-      type: file.type,
-      isPublic: file.isPublic,
-      parentId: file.parentId,
-    }));
+    const jsonResponse = [];
+    for await (const file of allFiles) {
+      jsonResponse.push({
+        id: file._id,
+        userId: file.userId,
+        name: file.name,
+        type: file.type,
+        isPublic: file.isPublic,
+        parentId: file.parentId,
+      });
+    }
 
     return res.status(201).json(jsonResponse);
   },
