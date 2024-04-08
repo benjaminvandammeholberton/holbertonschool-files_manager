@@ -134,7 +134,7 @@ const FilesController = {
       return res.status(401).json({ error: 'Not found' });
     }
     return res.status(201).json({
-      id: file.id,
+      id: file._id,
       userId: file.userId,
       name: file.name,
       type: file.type,
