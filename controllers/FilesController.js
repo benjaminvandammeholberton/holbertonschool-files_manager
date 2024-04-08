@@ -104,7 +104,7 @@ const FilesController = {
       name,
       type,
       isPublic: isPublic || false,
-      parentId: parentId || 0,
+      parentId: new ObjectId(parentId) || 0,
       localPath: filePath,
     };
     const filesCollection = dbClient.db.collection('files');
@@ -155,7 +155,7 @@ const FilesController = {
 
     if (parentId) {
       const cursor = await filesCollection.aggregate([
-        { $match: { userId: userIdtoFind, parentId: parseInt(parentId, 10) } },
+        { $match: { userId: userIdtoFind, parentId: new ObjectId(parentId) } },
         { $limit: 20 },
         { $skip: page * 20 },
       ]);
