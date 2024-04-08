@@ -80,7 +80,7 @@ const FilesController = {
 
     // File creation
     const uuid = uuidv4();
-    const folderPath = process.env.FOLDER_PATH || '/tmp/files_manager';
+    const folderPath = process.env.FOLDER_PATH || './tmp/files_manager';
     const filePath = `${folderPath}/${uuid}`;
 
     if (!fs.existsSync(folderPath)) {
@@ -273,7 +273,12 @@ const FilesController = {
 
   getFile: async (req, res) => {
     // check if the file exists
-    const fileId = ObjectId(req.params.id);
+    let fileId = req.params.id;
+    try {
+      fileId = ObjectId(req.params.id);
+    } catch (err) {
+      return res.status(404).json({ error: 'Not found' });
+    }
     const filesCollection = dbClient.db.collection('files');
     const file = await filesCollection.findOne({ _id: fileId });
     if (!file) {
