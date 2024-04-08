@@ -299,7 +299,7 @@ const FilesController = {
     try {
       const fileContent = fs.readFileSync(file.localPath, 'utf-8');
       const type = mime.lookup(file.name);
-      res.set('Content-Type', `${type}`);
+      res.setHeader('Content-Type', `${type}`);
       return res.send(fileContent);
     } catch (err) {
       return res.status(404).json({ error: 'Not found' });
