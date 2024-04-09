@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import Queue from 'bull';
 import fs from 'fs';
 import mime from 'mime-types';
 import { v4 as uuidv4 } from 'uuid';
@@ -80,7 +81,7 @@ const FilesController = {
 
     // File creation
     const uuid = uuidv4();
-    const folderPath = process.env.FOLDER_PATH || '/tmp/files_manager';
+    const folderPath = process.env.FOLDER_PATH || './tmp/files_manager';
     const filePath = `${folderPath}/${uuid}`;
 
     if (!fs.existsSync(folderPath)) {
@@ -91,7 +92,7 @@ const FilesController = {
         }
       });
     }
-    const decryptedData = Buffer.from(data, 'base64').toString('utf-8');
+    const decryptedData = Buffer.from(data, 'base64');
     fs.writeFile(filePath, decryptedData, (err) => {
       if (err) {
         console.error('A problem occured when creating the file', err);
@@ -111,6 +112,13 @@ const FilesController = {
     const filesCollection = dbClient.db.collection('files');
     await filesCollection.insertOne(newFile);
     newFile.id = newFile._id;
+
+    // Add image to the Bull queue
+    const queue = new Queue('fileQueue');
+    if (newFile.type === 'image') {
+      await queue.add({ userId: newFile.userId, fileId: newFile.id });
+    }
+
     return res.status(201).json({
       id: newFile.id,
       userId,
