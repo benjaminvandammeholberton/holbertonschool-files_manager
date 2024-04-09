@@ -300,7 +300,9 @@ const FilesController = {
     if (file.type === 'folder') return res.status(400).json({ error: 'A folder doesn\'t have content' });
 
     try {
-      const fileContent = fs.readFileSync(file.localPath);
+      const { size } = req.query;
+      const path = size ? `${file.localPath}_${size}` : file.localPath;
+      const fileContent = fs.readFileSync(path);
       const type = mime.lookup(file.name);
       res.set('Content-Type', `${type}`);
       return res.status(200).send(fileContent);

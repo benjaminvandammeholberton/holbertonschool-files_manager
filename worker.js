@@ -27,10 +27,10 @@ queue.process(async (job, done) => {
       const processedImage100 = await imageThumbnail(image.localPath, { width: 100 });
       const newPath100 = `${image.localPath}_100`;
       fs.writeFileSync(newPath100, processedImage100);
-      const processedImage250 = await imageThumbnail(image.localPath, { width: 100 });
+      const processedImage250 = await imageThumbnail(image.localPath, { width: 250 });
       const newPath250 = `${image.localPath}_250`;
       fs.writeFileSync(newPath250, processedImage250);
-      const processedImage500 = await imageThumbnail(image.localPath, { width: 100 });
+      const processedImage500 = await imageThumbnail(image.localPath, { width: 500 });
       const newPath500 = `${image.localPath}_500`;
       fs.writeFileSync(newPath500, processedImage500);
     } catch (err) {
