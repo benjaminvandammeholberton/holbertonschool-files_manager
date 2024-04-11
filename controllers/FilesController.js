@@ -106,7 +106,7 @@ const FilesController = {
       name,
       type,
       isPublic: isPublic || false,
-      parentId: ObjectId(parentId) || 0,
+      parentId: parentId || 0,
       localPath: filePath,
     };
     const filesCollection = dbClient.db.collection('files');
