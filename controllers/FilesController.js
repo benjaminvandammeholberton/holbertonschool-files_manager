@@ -190,7 +190,7 @@ const FilesController = {
       });
     }
 
-    return res.status(201).json(jsonResponse);
+    return res.status(200).json(jsonResponse);
   },
 
   putPublish: async (req, res) => {
