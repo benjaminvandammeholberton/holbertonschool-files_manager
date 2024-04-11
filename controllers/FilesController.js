@@ -141,7 +141,7 @@ const FilesController = {
     if (!file || userId !== file.userId.toString()) {
       return res.status(401).json({ error: 'Not found' });
     }
-    return res.status(201).json({
+    return res.status(200).json({
       id: file._id,
       userId: file.userId,
       name: file.name,
