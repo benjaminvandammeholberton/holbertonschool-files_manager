@@ -1,0 +1,42 @@
+// connect
+curl 0.0.0.0:5000/connect -H "Authorization: Basic Ym9iQGR5bGFuLmNvbTp0b3RvMTIzNCE=" ; echo ""
+
+//task 5
+curl -XPOST 0.0.0.0:5000/files -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" -H "Content-Type: application/json" -d '{ "name": "myText.txt", "type": "file", "data": "SGVsbG8gV2Vic3RhY2shCg==" }' ; echo ""
+curl -XPOST 0.0.0.0:5000/files -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" -H "Content-Type: application/json" -d '{ "name": "images", "type": "folder" }' ; echo ""
+python image_upload.py ./image.png af04f0a3-a354-4361-9a90-5d8ef68aed9f 661540f1e24a67c15f40193d
+
+//get file or folder
+curl -XGET 0.0.0.0:5000/files/660e623ed8e9a21e78d54edf -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" ; echo ""
+
+//create a file
+curl -XPOST 0.0.0.0:5000/files -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" -H "Content-Type: application/json" -d '{ "name": "myText.txt", "type": "image", "data": "SGVsbG8gV2Vic3RhY2shCg==" }' ; echo ""
+
+//change private to public
+curl -XPUT 0.0.0.0:5000/files/6613f200fee8444288f2615a/publish -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" ; echo ""
+
+//change public to private
+curl -XPUT 0.0.0.0:5000/files/6613f200fee8444288f2615a/unpublish -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" ; echo ""
+
+//get file data
+curl -XGET "0.0.0.0:5000/files/66152408cc4511b3e60aef64/data?size=10" -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" ; echo ""
+curl -XGET 0.0.0.0:5000/files/66152408cc4511b3e60aef64/data ; echo ""
+
+//get file infos
+curl -XGET 0.0.0.0:5000/files/66150779cdcbd38e6d514f5b -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" ; echo ""
+
+//get all files infos
+curl -XGET 0.0.0.0:5000/files -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" ; echo ""
+
+//get files info from folder
+curl -XGET "0.0.0.0:5000/files?parentId=660e623ed8e9a21e78d54edf" -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" ; echo ""
+
+//add file in folder
+curl -XPOST 0.0.0.0:5000/files -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" -H "Content-Type: application/json" -d '{ "name": "myText.txt", "type": "file", "data": "SGVsbG8gV2Vic3RhY2shCg==", "parentId": "660e623ed8e9a21e78d54edf" }' ; echo ""
+curl -XPOST 0.0.0.0:5000/files -H "X-Token: af04f0a3-a354-4361-9a90-5d8ef68aed9f" -H "Content-Type: application/json" -d '{ "name": "myText.txt", "type": "file", "data": "SGVsbG8gV2Vic3RhY2shCg==", "parentId": "660e623ed8e9a21e78d54edf" }' ; echo ""
+
+//task 9
+curl -XGET "0.0.0.0:5000/files/66153c015e8370beec5a1619/data?size=500" -so new_image.png ; file new_image.png
+
+//python request
+python image_upload.py ./image.png af04f0a3-a354-4361-9a90-5d8ef68aed9f 660e623ed8e9a21e78d54edf
